@@ -1,0 +1,70 @@
+Prezentare Generală
+Acest document descrie în detaliu conceptul platformei propuse: o rețea socială de nouă generație, bazată pe inteligență artificială, care combină networking-ul profesional, colaborarea pe proiecte, descoperirea de conținut și oportunitățile de învățare. Scopul nu este de a copia platformele tradiționale (Twitter, LinkedIn), ci de a construi un ecosistem inteligent unde utilizatorii pot să își dezvolte profilul, să colaboreze și să acceseze informație relevantă într-un mod personalizat.
+
+1. Experiența de bază a utilizatorului
+Platforma va avea trei piloni principali:
+Profiluri dinamice – fiecare utilizator poate avea mai multe tipuri de profiluri (business, academic, creator), iar AI-ul sintetizează și actualizează automat descrierea, skill-urile și interesele.
+Feed inteligent – conținut personalizat în funcție de interese, stări (mod „Learning” sau mod „Networking”), cu rezumate AI și recomandări contextuale.
+Conectare flexibilă – trei niveluri de relaționare:
+Follow – pentru descoperire rapidă.
+Connect – pentru colaborări apropiate.
+Subscribe – nu doar la persoane, ci și la teme, proiecte sau colecții de conținut.
+2. Funcționalități AI în feed
+Smart Sorting / Multi-feed – utilizatorul poate comuta între feed-uri tematice („AI Research”, „Green Finance”) sau poate vedea „Today’s Top in My Network”.
+AI Summaries – articole lungi, PDF-uri sau postări complexe apar ca rezumate în 3 bullet points; utilizatorul poate cere versiunea tehnică sau cea simplificată.
+Contextual Recommendations – sub fiecare post apar sugestii: „Oameni ca tine urmăresc această discuție” sau „Acest proiect caută colaboratori”.
+Discussion Layers – în loc de comentarii unice, fiecare postare poate avea mai multe niveluri: un fir tehnic, unul politic, unul educațional.
+AI Q&A în feed – utilizatorii pot întreba direct AI-ul: „Care sunt principalele dezbateri despre CBDC săptămâna aceasta?” iar răspunsul apare ca digest.
+Micro-learning nuggets – AI-ul transformă postările complexe în quiz-uri sau highlight-uri educaționale.
+Timeline / Time Machine – posibilitatea de a urmări cum a evoluat o temă de discuție în timp (ex. toate postările despre #Eurodollar din ultimele 6 luni).
+3. Profiluri inteligente
+AI Lens – o descriere generată de AI: „Acest utilizator lucrează pe Eurodollar system, CBDCs și tokenization.”
+Tag-uri dinamice – AI-ul actualizează automat temele principale abordate de utilizator.
+Knowledge Graph personal – vizualizare a conexiunilor dintre subiectele de interes.
+AI-curated Library – secțiune cu articole/postări-cheie pin-uite de utilizator sau propuse de AI.
+Skill Validation – AI evidențiază competențe demonstrate prin activitate (ex. „A explicat repo markets în Eurocrisis cu engagement ridicat”).
+4. Funcții colaborative
+Project Boards – mini-spații pentru colaborare (documente, timeline, chat, AI assistant).
+Collaboration Requests – userii pot marca postările ca „Looking for partners” / „Open for feedback”, iar AI-ul sugerează potriviri.
+AI Meeting Notes – pentru call-uri făcute în platformă, AI-ul generează transcript, rezumat și „next steps”.
+Build-on posts – în loc de comentarii simple, userii pot contribui prin „expand this idea”, transformând feed-ul într-un spațiu de co-creație.
+Există și posibilitatea de callout-uri pentru colaborări, în care un utilizator poate propune subiecte de discuție, poate cere feedback, poate căuta potențiali co-autori pentru proiecte antreprenoriale, de cercetare etc.
+Cross-feed Insights – AI conectează postări aparent diferite („Discuția despre AI ethics se leagă de dezbaterea despre data sovereignty”).
+5. Job & Project Marketplace
+Job Cards inteligente – apar în feed ca mini-postări; AI compară skill-urile tale cu cerințele și scoate job-ul în față dacă e relevant.
+Project-based matching – nu doar joburi full-time, ci și colaborări scurte („căutăm un analist pentru 2 săptămâni pe tokenization”).
+Dynamic Skills Profile – AI generează un portofoliu dinamic bazat pe activitatea utilizatorului în platformă.
+Skill Gap Analysis – când vezi un job, AI-ul arată ce îți lipsește și propune micro-learning-uri.
+Collaborative Hiring – angajatorii pot posta un board unde comunitatea și AI-ul contribuie la shortlist.
+6. AI Tools integrate
+AI Content Drafting – utilizatorul scrie un draft, AI-ul îl rafinează (stil academic, simplificat sau vizual).
+Post Templates inteligente – AI sugerează formate: thread, raport, sondaj, mini-eseu.
+Auto-tagging – fiecare post primește tag-uri automat, pentru a alimenta algoritmii de recomandare.
+AI Digest – utilizatorul primește zilnic/săptămânal un rezumat personalizat: „Top posts for you”.
+AI Persona Profiles – fiecare user poate crea un „mini-agent” care răspunde la întrebări despre munca lui.
+7. Încredere și siguranță
+AI Moderation – detectarea și ascunderea spam-ului, conținutului abuziv sau irelevant.
+Transparency Layer – utilizatorul poate vedea: „Această postare a fost marcată ca spam. Vrei să o vizualizezi oricum?”
+Quality Signals – fiecare postare primește un scor de încredere bazat pe relevanță, credibilitate și engagement.
+8. Monetizare
+Freemium model – acces gratuit la funcționalitățile de bază, acces premium pentru AI features avansate (summaries, Q&A, analytics).
+Subscription tiers – pentru companii și profesioniști, acces la job marketplace, project boards extinse și AI-curated shortlists.
+Token / Credit system – userii pot câștiga puncte prin contribuții validate de AI (ex. recomandări, skill validation), utilizabile pentru servicii premium.
+Employer fees – companiile plătesc pentru listarea joburilor premium și pentru shortlist-uri AI.
+9. Extensie posibilă: Sistem de plăți / Wallet
+Inspirat de viziunea „everything app”, fiecare utilizator poate avea un wallet integrat pentru:
+micro-plăți între utilizatori (tip „tip jar”),
+tranzacții pentru servicii,
+acces la funcționalități premium,
+recompense pentru contribuții.
+În acest moment, există o integrare făcută cu Stripe care îi permite unui utilizator să ofere atât postări gratuite, cât și postări plătite sub forma unui one-time fee sau a unui abonament lunar. Totodată, fiecare utilizator are o funcție preinstalată prin care poate oferi tips autorului unei postări, atâta timp cât autorul dorește acest lucru.
+📌 Rezultatul final:
+Platforma devine un hub inteligent de networking, colaborare și cunoaștere, unde AI-ul nu e doar un „feature”, ci infrastructura centrală care personalizează experiența fiecărui utilizator și îl ajută să își valorifice competențele.
+10. AI Chat & AI Persona Profiles
+• AI Chat integrat – fiecare utilizator are acces la un chat AI direct în platformă, care îl poate ajuta să redacteze postări, să își organizeze ideile, să genereze rezumate sau efectiv să caute informații în aplicație (un Google intern).
+• Asistent personalizat – AI-ul poate funcționa ca un „copilot de productivitate”, adaptat stilului fiecărui utilizator pe baza activității din feed, a intereselor și a proiectelor urmărite.
+• AI Persona Profiles – fiecare utilizator își poate crea o „versiune AI” a sa (un mini-agent) care răspunde la întrebări despre skill-urile, articolele și postările lui.
+➡ Exemplu: „Întreabă-l pe Alexandru-AI despre tokenization” → AI-ul răspunde pe baza conținutului creat de Alexandru.
+• Integrare cu colaborările – AI Chat poate sugera potențiali parteneri de lucru, poate genera drafturi de proiect și poate structura un plan de colaborare pe baza obiectivelor comune.
+• Funcție educațională – prin AI Chat, utilizatorii pot primi explicații pe teme complexe, micro-learning personalizat sau chiar simulări de interviuri, legând astfel partea de marketplace de cea de învățare continuă.
+

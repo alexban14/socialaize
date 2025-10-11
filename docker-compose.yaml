@@ -1,0 +1,103 @@
+services:
+  postgres:
+    image: postgres:17
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    container_name: socializeai-postgres
+    volumes:
+      - socializeai-pg-data:/var/lib/postgresql/data
+    ports:
+      - "6224:5432"
+    networks:
+      - default
+
+  redis:
+    image: redis:latest
+    container_name: socializeai-redis
+    networks:
+      - default
+
+  backend:
+    build:
+      context: ./backend
+      target: php
+      args:
+        - APP_ENV=${APP_ENV}
+    env_file:
+      - ./backend/.env
+    environment:
+      - APP_ENV=${APP_ENV}
+      - CONTAINER_ROLE=${CONTAINER_ROLE}
+    container_name: socializeai-backend
+    working_dir: /var/www/html
+    volumes:
+      - ./backend:/var/www/html
+    ports:
+      - "6225:8000"
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - default
+
+  queue:
+    build:
+      context: ./backend
+      target: php
+      args:
+        - APP_ENV=${APP_ENV}
+    environment:
+      - APP_ENV=${APP_ENV}
+      - CONTAINER_ROLE=queue
+    container_name: socializeai-queue
+    working_dir: /var/www/html
+    volumes:
+      - ./backend:/var/www/html
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - default
+
+  scheduler:
+    build:
+      context: ./backend
+      target: php
+    environment:
+      - APP_ENV=${APP_ENV}
+      - CONTAINER_ROLE=scheduler
+    container_name: socializeai-scheduler
+    working_dir: /var/www/html
+    volumes:
+      - ./backend:/var/www/html
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - default
+
+  spa:
+    build:
+      context: ./spa
+      dockerfile: Dockerfile
+    env_file:
+      - ./spa/.env
+    ports:
+      - "6226:5173"
+    depends_on:
+      - backend
+    volumes:
+      - ./spa:/app
+      - /app/node_modules
+    networks:
+      - default
+
+volumes:
+  socializeai-pg-data: ~
+
+networks:
+  default:
+    driver: bridge

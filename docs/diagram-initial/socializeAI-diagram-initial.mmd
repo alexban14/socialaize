@@ -1,0 +1,111 @@
+---
+config:
+  theme: mc
+---
+erDiagram
+    users {
+        UUID id PK
+        string username
+        string full_name
+        string avatar_url
+        string bio
+    }
+    posts {
+        UUID id PK
+        UUID user_id FK
+        string title
+        string content
+        string type
+        boolean is_paid
+    }
+    post_comments {
+        UUID id PK
+        UUID post_id FK
+        UUID user_id FK
+        string content
+        UUID parent_comment_id FK
+    }
+    post_likes {
+        UUID id PK
+        UUID post_id FK
+        UUID user_id FK
+    }
+    follows {
+        UUID follower_user_id PK,FK
+        UUID followed_user_id PK,FK
+    }
+    connections {
+        UUID user_id_1 PK,FK
+        UUID user_id_2 PK,FK
+        string status
+    }
+    groups {
+        UUID id PK
+        string name
+        string description
+        UUID creator_id FK
+    }
+    group_members {
+        UUID group_id PK,FK
+        UUID user_id PK,FK
+        string role
+    }
+    project_boards {
+        UUID id PK
+        string title
+        UUID creator_id FK
+    }
+    board_tasks {
+        UUID id PK
+        UUID board_id FK
+        string title
+        string status
+        UUID assigned_to FK
+    }
+    users ||--o{ posts : "creates"
+    users ||--o{ post_comments : "writes"
+    users ||--o{ post_likes : "likes"
+    users ||--o{ subscriptions : "subscribes_to"
+    users ||--o{ groups : "creates"
+    users ||--o{ project_boards : "creates"
+    users ||--o{ ai_personas : "creates"
+    users ||--o{ job_posts : "creates"
+    users ||--o{ job_applications : "applies_to"
+    posts ||--o{ post_comments : "has"
+    posts ||--o{ post_likes : "has"
+    posts ||--o{ discussion_layers : "has"
+    post_comments ||--o{ post_comments : "is_reply_to"
+    groups ||--o{ group_members : "has"
+    users ||--o{ group_members : "is_member_of"
+    project_boards ||--o{ board_tasks : "has"
+    project_boards ||--o{ meeting_notes : "has"
+    subscriptions {
+        UUID user_id PK,FK
+        string subscription_type
+        UUID target_id PK
+    }
+    ai_personas {
+        UUID id PK
+        UUID user_id FK
+        string name
+    }
+    job_posts {
+        UUID id PK
+        UUID user_id FK
+        string title
+    }
+    job_applications {
+        UUID id PK
+        UUID job_id FK
+        UUID applicant_id FK
+    }
+    discussion_layers {
+        UUID id PK
+        UUID post_id FK
+    }
+    meeting_notes {
+        UUID id PK
+        UUID board_id FK
+    }
+    users }o--o{ follows : "follows"
+    users }o--o{ connections : "connects_with"

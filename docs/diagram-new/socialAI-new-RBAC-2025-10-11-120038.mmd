@@ -1,0 +1,166 @@
+erDiagram
+    %% --- Core User, Auth, & RBAC ---
+    users {
+        BIGINT id PK
+        string name
+        string email UK
+        string password
+        TIMESTAMPTZ email_verified_at
+        TEXT avatar_url
+        TEXT bio
+        TEXT website
+        TEXT location
+        TIMESTAMPTZ created_at
+        TIMESTAMPTZ updated_at
+    }
+
+    oauth_access_tokens {
+        string id PK
+        BIGINT user_id FK
+        boolean revoked
+        DATETIME expires_at
+    }
+
+    roles {
+        BIGINT id PK
+        string name UK
+        string guard_name
+    }
+
+    permissions {
+        BIGINT id PK
+        string name UK
+        string guard_name
+    }
+
+    model_has_roles {
+        BIGINT role_id PK,FK
+        string model_type PK
+        BIGINT model_id PK,FK "user_id"
+    }
+
+    role_has_permissions {
+        BIGINT permission_id PK,FK
+        BIGINT role_id PK,FK
+    }
+
+    %% --- Media ---
+    media {
+        BIGINT id PK
+        string model_type "Polymorphic: e.g., 'App\\Models\\User'"
+        BIGINT model_id "Polymorphic: e.g., users.id"
+        string collection_name "e.g., 'avatars', 'posts'"
+        string file_name
+        string mime_type
+        string disk "e.g., 'minio'"
+        BIGINT size
+    }
+
+    %% --- Content & Interactions ---
+    content_nodes {
+        UUID id PK
+        BIGINT user_id FK
+        UUID parent_id FK "Nullable, for replies"
+        TEXT type "NOT NULL, e.g., 'post', 'article'"
+        TIMESTAMPTZ created_at
+    }
+
+    post_content {
+        UUID node_id PK,FK
+        TEXT title "Nullable, for articles"
+        TEXT content "NOT NULL"
+    }
+
+    poll_content {
+        UUID node_id PK,FK
+        TEXT question "NOT NULL"
+    }
+
+    poll_options {
+        UUID id PK
+        UUID node_id FK
+        TEXT option_text "NOT NULL"
+    }
+
+    poll_votes {
+        UUID option_id PK,FK
+        BIGINT user_id PK,FK
+    }
+
+    content_likes {
+        UUID node_id PK,FK
+        BIGINT user_id PK,FK
+    }
+
+    bookmarks {
+        UUID node_id PK,FK
+        BIGINT user_id PK,FK
+    }
+
+    %% --- Messaging ---
+    conversations {
+        UUID id PK
+        TEXT type "NOT NULL, 'direct' or 'group'"
+        TEXT name "Nullable, for group convos"
+        TIMESTAMPTZ created_at
+    }
+
+    conversation_participants {
+        UUID conversation_id PK,FK
+        BIGINT user_id PK,FK
+        TEXT role "'admin' or 'member'"
+    }
+
+    messages {
+        UUID id PK
+        UUID conversation_id FK
+        BIGINT sender_id FK
+        TEXT content "NOT NULL"
+        UUID reply_to_message_id FK "Nullable"
+        TIMESTAMPTZ created_at
+    }
+
+    %% --- Social Graph ---
+    follows {
+        BIGINT follower_id PK,FK
+        BIGINT following_id PK,FK
+    }
+
+    connections {
+        BIGINT user_id_1 PK,FK
+        BIGINT user_id_2 PK,FK
+        TEXT status "'pending', 'accepted'"
+        BIGINT requested_by FK
+    }
+
+    %% --- Relationships ---
+    users ||--o{ oauth_access_tokens : "has"
+    users }o--o{ model_has_roles : "has role"
+    roles ||--o{ model_has_roles : "is assigned to"
+    roles }o--o{ role_has_permissions : "has permission"
+    permissions ||--o{ role_has_permissions : "is granted to"
+
+    users ||--o{ content_nodes : "creates"
+    content_nodes ||--o{ content_nodes : "is reply to"
+    content_nodes ||--|{ post_content : "has"
+    content_nodes ||--|{ poll_content : "has"
+    poll_content ||--o{ poll_options : "has"
+    poll_options ||--o{ poll_votes : "receives"
+    users ||--o{ poll_votes : "casts"
+
+    users ||..o{ media : "has (avatar)"
+    content_nodes ||..o{ media : "has (attachment)"
+
+    content_nodes }o--o{ content_likes : "is liked by"
+    users ||--o{ content_likes : "likes"
+
+    content_nodes }o--o{ bookmarks : "is bookmarked by"
+    users ||--o{ bookmarks : "bookmarks"
+
+    users ||--o{ messages : "sends"
+    conversations ||--o{ messages : "has"
+    users }o--o{ conversation_participants : "participates in"
+    conversations }o--o{ conversation_participants : "has"
+
+    users }o--o{ follows : "follows"
+    users }o--o{ connections : "connects with"
