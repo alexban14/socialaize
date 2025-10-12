@@ -10,7 +10,7 @@ services:
     volumes:
       - socializeai-pg-data:/var/lib/postgresql/data
     ports:
-      - "6224:5432"
+      - "6324:5432"
     networks:
       - default
 
@@ -36,7 +36,7 @@ services:
     volumes:
       - ./backend:/var/www/html
     ports:
-      - "6225:8000"
+      - "6325:8000"
     depends_on:
       - postgres
       - redis
@@ -86,7 +86,7 @@ services:
     env_file:
       - ./spa/.env
     ports:
-      - "6226:5173"
+      - "6326:5173"
     depends_on:
       - backend
     volumes:
