@@ -26,6 +26,11 @@ class User extends Authenticatable implements OAuthenticatable
         'name',
         'email',
         'password',
+        'avatar_url',
+        'bio',
+        'website',
+        'location',
+        'cover_image_url',
     ];
 
     /**
