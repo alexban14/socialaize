@@ -32,6 +32,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const initializeAuth = async () => {
       if (token) {
+        setLoading(true);
         api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         try {
           const userData = await authService.getAuthenticatedUser();
@@ -39,10 +40,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         } catch (error) {
           console.error('Failed to fetch user', error);
           setToken(null);
+          setUser(null);
           localStorage.removeItem('authToken');
+          delete api.defaults.headers.common['Authorization'];
+        } finally {
+          setLoading(false);
         }
+      } else {
+        setUser(null);
+        setLoading(false);
       }
-      setLoading(false);
     };
     initializeAuth();
   }, [token]);

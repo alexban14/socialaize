@@ -1,6 +1,5 @@
 import { useAuth } from '@/hooks/useAuth';
 import { UserProfile } from '@/components/UserProfile';
-import { SocialHeader } from '@/components/SocialHeader';
 
 const Profile = () => {
   const { user, loading } = useAuth();
@@ -35,12 +34,9 @@ const Profile = () => {
   };
 
   return (
-    <div>
-      <SocialHeader />
-      <main className="container mx-auto py-8 px-4">
-        <UserProfile user={userProfileData} isOwnProfile={true} />
-      </main>
-    </div>
+    <main className="container mx-auto py-8 px-4">
+      <UserProfile user={userProfileData} isOwnProfile={true} />
+    </main>
   );
 };
 

@@ -19,14 +19,13 @@ export const login = async (credentials: LoginData) => {
     client_secret: OAUTH_CLIENT_SECRET,
     username: credentials.email,
     password: credentials.password,
-    scope: '',
+    scope: '*',
   });
   return response.data;
 };
 
 export const register = async (data: SignupData) => {
-  const { password_confirmation, ...rest } = data;
-  const response = await api.post('/register', rest);
+  const response = await api.post('/register', data);
   return response.data;
 };
 

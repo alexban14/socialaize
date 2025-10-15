@@ -9,14 +9,14 @@ use Illuminate\Support\Facades\Auth;
 
 class PassportAuthService implements AuthServiceInterface
 {
-    protected $userRepository;
+    protected UserRepositoryInterface $userRepository;
 
     public function __construct(UserRepositoryInterface $userRepository)
     {
         $this->userRepository = $userRepository;
     }
 
-    public function register(array $data)
+    public function register(array $data): array
     {
         $user = $this->userRepository->create($data);
 
@@ -25,7 +25,7 @@ class PassportAuthService implements AuthServiceInterface
         return ['user' => $user, 'token' => $token];
     }
 
-    public function login(array $credentials)
+    public function login(array $credentials): array | null
     {
         if (!Auth::attempt($credentials)) {
             return null;
@@ -37,7 +37,7 @@ class PassportAuthService implements AuthServiceInterface
         return ['user' => $user, 'token' => $token];
     }
 
-    public function logout(Request $request)
+    public function logout(Request $request): void
     {
         $request->user()->token()->revoke();
     }

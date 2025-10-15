@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { InteractionButtons } from "./InteractionButtons";
+import { InteractionButtons } from "@/components/InteractionButtons";
 
 interface UserStats {
   posts: number;
