@@ -116,4 +116,19 @@ return [
 
     'password_timeout' => env('AUTH_PASSWORD_TIMEOUT', 10800),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Email Verification Redirect Allowlist
+    |--------------------------------------------------------------------------
+    |
+    | A comma-separated list of allowed hostnames that the application can
+    | redirect to after a user successfully verifies their email address.
+    | This is a security measure to prevent open redirect vulnerabilities.
+    |
+    */
+
+    'email_verification_redirect_allowlist' => array_filter(
+        array_map('trim', explode(',', env('VERIFICATION_REDIRECT_ALLOWED_HOSTS', 'localhost')))
+    ),
+
 ];

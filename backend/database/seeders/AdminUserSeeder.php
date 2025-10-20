@@ -14,8 +14,6 @@ class AdminUserSeeder extends Seeder
      */
     public function run(): void
     {
-        $pass =
-
         User::create([
             'name' => 'Alex Ban',
             'email' => 'alexbanut10@gmail.com',

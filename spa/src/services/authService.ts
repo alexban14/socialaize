@@ -33,6 +33,10 @@ export const logout = async () => {
   return await api.post('/logout');
 };
 
+export const resendVerificationEmail = async () => {
+  return await api.post('/email/verification-notification');
+};
+
 export const getAuthenticatedUser = async (): Promise<User> => {
   const response = await api.get('/user');
   return response.data;

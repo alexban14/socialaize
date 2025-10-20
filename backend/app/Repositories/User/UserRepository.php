@@ -20,4 +20,16 @@ class UserRepository implements UserRepositoryInterface
     {
         return User::where('email', $email)->first();
     }
+
+    public function findById(string $id): ?User
+    {
+        return User::find($id);
+    }
+
+    public function markEmailAsVerified(User $user): bool
+    {
+        return $user->forceFill([
+            'email_verified_at' => now(),
+        ])->save();
+    }
 }
