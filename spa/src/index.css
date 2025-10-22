@@ -33,6 +33,10 @@ All colors MUST be HSL for consistency.
     --accent: 340 75% 55%;
     --accent-foreground: 0 0% 100%;
     --accent-glow: 340 100% 75%;
+
+    /* Destructive colors */
+    --destructive: 39 91% 55%; /* amber-500 */
+    --destructive-foreground: 210 40% 98%;
     
     /* Success/like colors */
     --success: 145 70% 50%;

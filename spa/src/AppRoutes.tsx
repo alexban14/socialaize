@@ -3,6 +3,9 @@ import { useAuth } from '@/hooks/useAuth';
 import Auth from '@/pages/Auth';
 import Index from '@/pages/Index';
 import Profile from '@/pages/Profile';
+import ForgotPassword from '@/pages/ForgotPassword';
+import ResetPassword from '@/pages/ResetPassword';
+import Settings from '@/pages/Settings';
 import { Navbar } from '@/components/layout/Navbar';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { Loader2 } from 'lucide-react';
@@ -38,6 +41,16 @@ export const AppRoutes = () => {
             <AuthRoute>
               <Auth />
             </AuthRoute>
+          }
+        />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <Settings />
+            </ProtectedRoute>
           }
         />
         <Route

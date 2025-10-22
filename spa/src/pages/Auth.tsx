@@ -1,4 +1,4 @@
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
@@ -186,6 +186,11 @@ const Auth = () => {
                       className="pl-10"
                     />
                     {loginErrors.password && <p className="text-destructive text-xs mt-1">{loginErrors.password.message}</p>}
+                  </div>
+                  <div className="text-right">
+                    <Link to="/forgot-password" className="text-sm underline">
+                      Forgot Password?
+                    </Link>
                   </div>
                 </div>
                 <Button type="submit" className="w-full" disabled={loginMutation.isPending}>
