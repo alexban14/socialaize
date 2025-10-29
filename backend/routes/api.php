@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\V1\ResetPasswordController;
 use App\Http\Controllers\Api\V1\UpdatePasswordController;
 use App\Http\Controllers\Api\V1\SwaggerController;
 use App\Http\Controllers\Api\V1\UserController;
+use App\Http\Controllers\Api\V1\MediaUploadController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -33,6 +34,7 @@ Route::prefix('v1')->group(function () {
             Route::post('/logout', [AuthController::class, 'logout']);
             Route::get('/user', [UserController::class, 'show']);
             Route::post('/update-password', UpdatePasswordController::class);
+            Route::post('/media', MediaUploadController::class);
         });
 
     });
