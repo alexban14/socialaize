@@ -13,4 +13,6 @@ interface UserRepositoryInterface
     public function findById(string $id): ?User;
 
     public function markEmailAsVerified(User $user): bool;
+
+    public function update(User $user, array $data): bool;
 }

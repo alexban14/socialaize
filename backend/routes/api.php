@@ -33,6 +33,7 @@ Route::prefix('v1')->group(function () {
         Route::middleware('auth:api')->group(function () {
             Route::post('/logout', [AuthController::class, 'logout']);
             Route::get('/user', [UserController::class, 'show']);
+            Route::post('/user', [UserController::class, 'update']);
             Route::post('/update-password', UpdatePasswordController::class);
             Route::post('/media', MediaUploadController::class);
         });

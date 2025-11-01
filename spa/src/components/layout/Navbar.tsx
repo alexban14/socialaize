@@ -85,7 +85,7 @@ export const Navbar = () => {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="sm" className="p-1 rounded-full">
                   <Avatar className="w-8 h-8 ring-2 ring-primary/20">
-                    <AvatarImage src={user?.avatar_url || ''} alt={user?.name || ''} />
+                    <AvatarImage src={user?.avatar || ''} alt={user?.name || ''} />
                     <AvatarFallback className="gradient-primary text-primary-foreground text-sm font-semibold">
                       {user?.name?.charAt(0)}
                     </AvatarFallback>
