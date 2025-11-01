@@ -7,9 +7,10 @@ use Illuminate\Support\Facades\Storage;
 
 class LocalStorageService implements StorageServiceInterface
 {
-    public function upload(UploadedFile $file, string $path = '/'): string
+    public function upload(UploadedFile $file, string $path = '/', string $visibility = 'private'): string
     {
-        $path = Storage::disk('public')->put($path, $file);
+        $options = ($visibility === 'public') ? ['visibility' => 'public'] : [];
+        $path = Storage::disk('public')->put($path, $file, $options);
 
         return $path;
     }

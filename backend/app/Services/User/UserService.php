@@ -18,4 +18,10 @@ class UserService implements UserServiceInterface
     {
         return $this->userRepository->findById($id);
     }
+
+    public function update(User $user, array $data): User
+    {
+        $this->userRepository->update($user, $data);
+        return $user->fresh();
+    }
 }

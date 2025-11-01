@@ -32,4 +32,9 @@ class UserRepository implements UserRepositoryInterface
             'email_verified_at' => now(),
         ])->save();
     }
+
+    public function update(User $user, array $data): bool
+    {
+        return $user->update($data);
+    }
 }

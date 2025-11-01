@@ -11,6 +11,7 @@ interface AuthContextType {
   login: (token: string) => void;
   logout: () => void;
   isAuthenticated: boolean;
+  refreshUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -29,16 +30,30 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  const refreshUser = async () => {
+    const currentToken = localStorage.getItem('authToken');
+    if (currentToken) {
+      api.defaults.headers.common['Authorization'] = `Bearer ${currentToken}`;
+      try {
+        const userData = await authService.getAuthenticatedUser();
+        setUser(userData);
+      } catch (error) {
+        console.error('Failed to fetch user during refresh', error);
+      }
+    }
+  };
+
   useEffect(() => {
     const initializeAuth = async () => {
-      if (token) {
+      const currentToken = localStorage.getItem('authToken');
+      if (currentToken) {
         setLoading(true);
-        api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        api.defaults.headers.common['Authorization'] = `Bearer ${currentToken}`;
         try {
           const userData = await authService.getAuthenticatedUser();
           setUser(userData);
         } catch (error) {
-          console.error('Failed to fetch user', error);
+          console.error('Failed to fetch user on initial load', error);
           setToken(null);
           setUser(null);
           localStorage.removeItem('authToken');
@@ -76,7 +91,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const isAuthenticated = !!user && !!token;
 
   return (
-    <AuthContext.Provider value={{ user, token, loading, login, logout, isAuthenticated }}>
+    <AuthContext.Provider value={{ user, token, loading, login, logout, isAuthenticated, refreshUser }}>
       {children}
     </AuthContext.Provider>
   );
