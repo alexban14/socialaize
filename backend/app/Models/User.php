@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasMedia;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -16,6 +17,7 @@ class User extends Authenticatable implements OAuthenticatable, MustVerifyEmail
     use HasFactory;
     use Notifiable;
     use HasApiTokens;
+    use HasMedia;
 
     /**
      * The attributes that are mass assignable.
@@ -26,11 +28,17 @@ class User extends Authenticatable implements OAuthenticatable, MustVerifyEmail
         'name',
         'email',
         'password',
-        'avatar_url',
         'bio',
         'website',
         'location',
-        'cover_image_url',
+    ];
+
+    /**
+     * @var list<string>
+     */
+    protected $appends = [
+        'avatar',
+        'cover_image'
     ];
 
     /**

@@ -20,6 +20,22 @@ services:
     networks:
       - default
 
+  minio:
+    image: quay.io/minio/minio:RELEASE.2025-04-22T22-12-26Z
+    restart: unless-stopped
+    container_name: socializeai-minio
+    command: 'server /data --console-address ":9001"'
+    ports:
+      - "6320:9000"
+      - "6321:9001"
+    environment:
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+    volumes:
+      - socializeai-minio-data:/minio/data:/data
+    networks:
+      - default
+
   backend:
     build:
       context: ./backend
@@ -97,6 +113,7 @@ services:
 
 volumes:
   socializeai-pg-data: ~
+  socializeai-minio-data: ~
 
 networks:
   default:

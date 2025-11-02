@@ -17,8 +17,8 @@ const Profile = () => {
     name: user.name,
     handle: user.email, // Using email as handle for now
     bio: user.bio || 'No bio yet.',
-    avatar: user.avatar_url || '',
-    coverImage: user.cover_image_url || '',
+    avatar: user.avatar || '',
+    coverImage: user.cover_image || '',
     location: user.location,
     website: user.website,
     joinedDate: new Date(user.created_at).toLocaleDateString(),

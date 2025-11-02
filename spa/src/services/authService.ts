@@ -57,3 +57,13 @@ export const updatePassword = async (data: any) => {
   return response.data;
 };
 
+export const updateUserProfile = async (data: FormData) => {
+  const response = await api.post('/user', data, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  return response.data;
+};
+
+
