@@ -9,11 +9,10 @@ use Illuminate\Support\Facades\Auth;
 
 class PassportAuthService implements AuthServiceInterface
 {
-    protected UserRepositoryInterface $userRepository;
-
-    public function __construct(UserRepositoryInterface $userRepository)
-    {
-        $this->userRepository = $userRepository;
+    public function __construct(
+        public readonly UserRepositoryInterface $userRepository
+    ) {
+        //
     }
 
     public function register(array $data): \App\Models\User

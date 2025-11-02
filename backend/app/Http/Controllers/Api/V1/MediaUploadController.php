@@ -9,8 +9,10 @@ use OpenApi\Attributes as OA;
 
 class MediaUploadController extends Controller
 {
-    public function __construct(private readonly StorageServiceInterface $storageService)
-    {
+    public function __construct(
+        private readonly StorageServiceInterface $storageService
+    ) {
+        //
     }
 
     #[OA\Post(

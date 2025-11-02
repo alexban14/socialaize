@@ -11,11 +11,10 @@ use OpenApi\Attributes as OA;
 
 class UpdatePasswordController extends Controller
 {
-    protected UpdatePasswordServiceInterface $updatePasswordService;
-
-    public function __construct(UpdatePasswordServiceInterface $updatePasswordService)
-    {
-        $this->updatePasswordService = $updatePasswordService;
+    public function __construct(
+        public readonly UpdatePasswordServiceInterface $updatePasswordService
+    ) {
+        //
     }
 
     #[OA\Post(

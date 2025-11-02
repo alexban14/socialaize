@@ -10,13 +10,11 @@ use Illuminate\Http\UploadedFile;
 
 class MediaService implements MediaServiceInterface
 {
-    protected MediaRepositoryInterface $mediaRepository;
-    protected StorageServiceInterface $storageService;
-
-    public function __construct(MediaRepositoryInterface $mediaRepository, StorageServiceInterface $storageService)
-    {
-        $this->mediaRepository = $mediaRepository;
-        $this->storageService = $storageService;
+    public function __construct(
+        public readonly MediaRepositoryInterface $mediaRepository,
+        public readonly StorageServiceInterface $storageService
+    ) {
+        //
     }
 
     public function uploadAndAttach(Model $model, UploadedFile $file, string $tag, string $visibility = 'private'): Media
@@ -41,7 +39,7 @@ class MediaService implements MediaServiceInterface
     {
         $this->mediaRepository->detach($media, $model, $tag);
         $this->storageService->delete($media->directory . '/' . $media->filename);
-        $media->delete();
+        $this->mediaRepository->delete($media);
     }
 
     public function replace(Model $model, UploadedFile $file, string $tag, string $visibility = 'private'): Media

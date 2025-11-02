@@ -7,11 +7,10 @@ use App\Repositories\User\UserRepositoryInterface;
 
 class UserService implements UserServiceInterface
 {
-    protected UserRepositoryInterface $userRepository;
-
-    public function __construct(UserRepositoryInterface $userRepository)
-    {
-        $this->userRepository = $userRepository;
+    public function __construct(
+        public readonly UserRepositoryInterface $userRepository
+    ) {
+        //
     }
 
     public function getById(string $id): ?User

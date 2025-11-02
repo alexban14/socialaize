@@ -12,13 +12,12 @@ use OpenApi\Attributes as OA;
 
 class UserController extends Controller
 {
-    protected UserServiceInterface $userService;
-    protected MediaServiceInterface $mediaService;
 
-    public function __construct(UserServiceInterface $userService, MediaServiceInterface $mediaService)
-    {
-        $this->userService = $userService;
-        $this->mediaService = $mediaService;
+    public function __construct(
+        public readonly UserServiceInterface $userService,
+        public readonly MediaServiceInterface $mediaService
+    ) {
+        //
     }
 
     #[OA\Get(
@@ -103,7 +102,7 @@ class UserController extends Controller
         if (!empty($validatedData)) {
             $this->userService->update($user, $validatedData);
         }
-        
+
         // Reload user to get updated media URLs
         $updatedUser = $this->userService->getById($user->id);
 

@@ -10,11 +10,10 @@ use Illuminate\Http\RedirectResponse;
 
 class EmailVerificationController extends Controller
 {
-    protected AuthServiceInterface $authService;
-
-    public function __construct(AuthServiceInterface $authService)
-    {
-        $this->authService = $authService;
+    public function __construct(
+        public readonly AuthServiceInterface $authService
+    ) {
+        //
     }
 
     /**

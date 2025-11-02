@@ -11,11 +11,10 @@ use OpenApi\Attributes as OA;
 
 class ForgotPasswordController extends Controller
 {
-    protected PasswordResetServiceInterface $passwordResetService;
-
-    public function __construct(PasswordResetServiceInterface $passwordResetService)
-    {
-        $this->passwordResetService = $passwordResetService;
+    public function __construct(
+        public readonly PasswordResetServiceInterface $passwordResetService
+    ) {
+        //
     }
 
     #[OA\Post(

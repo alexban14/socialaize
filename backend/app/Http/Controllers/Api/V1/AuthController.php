@@ -12,11 +12,10 @@ use OpenApi\Attributes as OA;
 #[OA\Info(version: '1.0', title: 'Socialaize API')]
 class AuthController extends Controller
 {
-    protected AuthServiceInterface $authService;
-
-    public function __construct(AuthServiceInterface $authService)
-    {
-        $this->authService = $authService;
+    public function __construct(
+        public readonly AuthServiceInterface $authService
+    ) {
+        //
     }
 
     #[OA\Post(
