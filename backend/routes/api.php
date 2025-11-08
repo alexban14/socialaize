@@ -7,7 +7,9 @@ use App\Http\Controllers\Api\V1\ResetPasswordController;
 use App\Http\Controllers\Api\V1\UpdatePasswordController;
 use App\Http\Controllers\Api\V1\SwaggerController;
 use App\Http\Controllers\Api\V1\UserController;
+use App\Http\Controllers\Api\V1\AiController;
 use App\Http\Controllers\Api\V1\MediaUploadController;
+use App\Http\Controllers\Api\V1\UserProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -33,9 +35,16 @@ Route::prefix('v1')->group(function () {
         Route::middleware('auth:api')->group(function () {
             Route::post('/logout', [AuthController::class, 'logout']);
             Route::get('/user', [UserController::class, 'show']);
-            Route::post('/user', [UserController::class, 'update']);
+            Route::post('/user/profile', [UserController::class, 'update']);
             Route::post('/update-password', UpdatePasswordController::class);
             Route::post('/media', MediaUploadController::class);
+
+            Route::get('/user/profiles', [UserProfileController::class, 'index']);
+            Route::post('/user/profiles', [UserProfileController::class, 'store']);
+            Route::put('/user/profiles/{profile_type}', [UserProfileController::class, 'update']);
+            Route::post('/user/profiles/active/{profile_type}', [UserProfileController::class, 'setActive']);
+
+            Route::post('/ai/synthesize-profile', [AiController::class, 'synthesizeProfile']);
         });
 
     });

@@ -6,6 +6,7 @@ import Profile from '@/pages/Profile';
 import ForgotPassword from '@/pages/ForgotPassword';
 import ResetPassword from '@/pages/ResetPassword';
 import Settings from '@/pages/Settings';
+import EditProfile from '@/pages/EditProfile';
 import { Navbar } from '@/components/layout/Navbar';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { Loader2 } from 'lucide-react';
@@ -50,6 +51,14 @@ export const AppRoutes = () => {
           element={
             <ProtectedRoute>
               <Settings />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile/edit"
+          element={
+            <ProtectedRoute>
+              <EditProfile />
             </ProtectedRoute>
           }
         />

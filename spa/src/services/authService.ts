@@ -2,7 +2,6 @@ import api from '@/lib/api';
 import oauthApi from '@/lib/oauthApi';
 import { loginSchema, signupSchema } from '@/schemas/auth';
 import { z } from 'zod';
-import { User } from '@/schemas/user';
 
 type LoginData = z.infer<typeof loginSchema>;
 type SignupData = z.infer<typeof signupSchema>;
@@ -37,11 +36,6 @@ export const resendVerificationEmail = async () => {
   return await api.post('/email/verification-notification');
 };
 
-export const getAuthenticatedUser = async (): Promise<User> => {
-  const response = await api.get('/user');
-  return response.data;
-};
-
 export const forgotPassword = async (data: { email: string }) => {
   const response = await api.post('/forgot-password', data);
   return response.data;
@@ -54,15 +48,6 @@ export const resetPassword = async (data: any) => {
 
 export const updatePassword = async (data: any) => {
   const response = await api.post('/update-password', data);
-  return response.data;
-};
-
-export const updateUserProfile = async (data: FormData) => {
-  const response = await api.post('/user', data, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
   return response.data;
 };
 

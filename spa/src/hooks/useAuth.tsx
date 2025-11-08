@@ -3,6 +3,7 @@ import { User } from '@/schemas/user';
 import api from '@/lib/api';
 import { useNavigate } from 'react-router-dom';
 import * as authService from '@/services/authService';
+import * as userService from '@/services/userService';
 
 interface AuthContextType {
   user: User | null;
@@ -35,7 +36,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (currentToken) {
       api.defaults.headers.common['Authorization'] = `Bearer ${currentToken}`;
       try {
-        const userData = await authService.getAuthenticatedUser();
+        const userData = await userService.getAuthenticatedUser();
         setUser(userData);
       } catch (error) {
         console.error('Failed to fetch user during refresh', error);
@@ -50,7 +51,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setLoading(true);
         api.defaults.headers.common['Authorization'] = `Bearer ${currentToken}`;
         try {
-          const userData = await authService.getAuthenticatedUser();
+          const userData = await userService.getAuthenticatedUser();
           setUser(userData);
         } catch (error) {
           console.error('Failed to fetch user on initial load', error);

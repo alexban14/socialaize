@@ -6,6 +6,8 @@ use App\Models\Concerns\HasMedia;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\Contracts\OAuthenticatable;
@@ -28,9 +30,6 @@ class User extends Authenticatable implements OAuthenticatable, MustVerifyEmail
         'name',
         'email',
         'password',
-        'bio',
-        'website',
-        'location',
     ];
 
     /**
@@ -62,5 +61,15 @@ class User extends Authenticatable implements OAuthenticatable, MustVerifyEmail
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function profiles(): HasMany
+    {
+        return $this->hasMany(UserProfile::class);
+    }
+
+    public function activeProfile(): HasOne
+    {
+        return $this->hasOne(UserProfile::class)->where('is_active', true);
     }
 }

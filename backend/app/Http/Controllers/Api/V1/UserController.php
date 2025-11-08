@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Services\Media\MediaServiceInterface;
 use App\Services\User\UserServiceInterface;
+use App\Services\UserProfile\UserProfileServiceInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -15,6 +16,7 @@ class UserController extends Controller
 
     public function __construct(
         public readonly UserServiceInterface $userService,
+        public readonly UserProfileServiceInterface $userProfileService,
         public readonly MediaServiceInterface $mediaService
     ) {
         //
@@ -38,11 +40,13 @@ class UserController extends Controller
             return response()->json(['message' => 'User not found'], 404);
         }
 
+        $user->load(['profiles', 'activeProfile']);
+
         return response()->json($user);
     }
 
     #[OA\Put(
-        path: '/api/v1/user',
+        path: '/api/v1/user/profile',
         summary: 'Update authenticated user profile',
         requestBody: new OA\RequestBody(
             required: true,
@@ -73,6 +77,7 @@ class UserController extends Controller
 
         $validator = Validator::make($request->all(), [
             'name' => 'sometimes|string|max:255',
+            'title' => 'nullable|string|max:255',
             'bio' => 'nullable|string',
             'website' => 'nullable|url',
             'location' => 'nullable|string|max:255',
@@ -98,13 +103,22 @@ class UserController extends Controller
             unset($validatedData['cover_image']);
         }
 
-        // Update other user data
+        // Update user name
+        if (isset($validatedData['name'])) {
+            $this->userService->update($user, ['name' => $validatedData['name']]);
+            unset($validatedData['name']);
+        }
+
+        // Update profile data
         if (!empty($validatedData)) {
-            $this->userService->update($user, $validatedData);
+            $activeProfile = $user->activeProfile;
+            $profileType = $activeProfile ? $activeProfile->profile_type->value : 'personal';
+            $this->userProfileService->updateProfile($user, $profileType, $validatedData);
         }
 
         // Reload user to get updated media URLs
         $updatedUser = $this->userService->getById($user->id);
+        $updatedUser->load(['profiles', 'activeProfile']);
 
         return response()->json($updatedUser);
     }
