@@ -10,6 +10,8 @@ use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\Api\V1\AiController;
 use App\Http\Controllers\Api\V1\MediaUploadController;
 use App\Http\Controllers\Api\V1\UserProfileController;
+use App\Http\Controllers\Api\V1\SkillController;
+use App\Http\Controllers\Api\V1\InterestController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -43,6 +45,18 @@ Route::prefix('v1')->group(function () {
             Route::post('/user/profiles', [UserProfileController::class, 'store']);
             Route::put('/user/profiles/{profile_type}', [UserProfileController::class, 'update']);
             Route::post('/user/profiles/active/{profile_type}', [UserProfileController::class, 'setActive']);
+
+            // Skills
+            Route::get('/skills', [SkillController::class, 'index']);
+            Route::get('/user/skills', [SkillController::class, 'userSkills']);
+            Route::post('/user/skills', [SkillController::class, 'store']);
+            Route::delete('/user/skills/{skillId}', [SkillController::class, 'destroy']);
+
+            // Interests
+            Route::get('/interests', [InterestController::class, 'index']);
+            Route::get('/user/interests', [InterestController::class, 'userInterests']);
+            Route::post('/user/interests', [InterestController::class, 'store']);
+            Route::delete('/user/interests/{interestId}', [InterestController::class, 'destroy']);
 
             Route::post('/ai/synthesize-profile', [AiController::class, 'synthesizeProfile']);
         });

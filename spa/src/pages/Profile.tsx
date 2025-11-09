@@ -1,6 +1,6 @@
 import { useAuth } from '@/hooks/useAuth';
 import { UserProfile as UserProfileComponent } from '@/components/UserProfile';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
@@ -31,8 +31,6 @@ const Profile = () => {
     coverImage: user.cover_image || '',
     location: activeProfile?.location,
     website: activeProfile?.website,
-    skills: activeProfile?.skills || [], // Pass skills
-    interests: activeProfile?.interests || [], // Pass interests
     joinedDate: new Date(user.created_at).toLocaleDateString(),
     verified: !!user.email_verified_at,
     stats: {

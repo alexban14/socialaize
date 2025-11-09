@@ -3,15 +3,20 @@
 namespace App\Services\AI;
 
 use App\Models\User;
+use App\Services\Interest\InterestServiceInterface;
+use App\Services\Skill\SkillServiceInterface;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Log;
 
 class AiService implements AiServiceInterface
 {
     protected Client $client;
     protected string $apiKey;
 
-    public function __construct()
-    {
+    public function __construct(
+        private readonly SkillServiceInterface $skillService,
+        private readonly InterestServiceInterface $interestService
+    ) {
         $this->client = new Client([
             'base_uri' => 'https://api.openai.com/v1/',
         ]);
@@ -52,17 +57,21 @@ class AiService implements AiServiceInterface
                     $activeProfile->bio = $profileData['bio'];
                 }
                 if (isset($profileData['skills']) && is_array($profileData['skills'])) {
-                    $existingSkills = $activeProfile->skills ?? [];
-                    $activeProfile->skills = array_values(array_unique(array_merge($existingSkills, $profileData['skills'])));
+                    foreach ($profileData['skills'] as $skillName) {
+                        $skill = $this->skillService->findOrCreate($skillName);
+                        $this->skillService->addSkillToProfile($skill, $activeProfile);
+                    }
                 }
                 if (isset($profileData['interests']) && is_array($profileData['interests'])) {
-                    $existingInterests = $activeProfile->interests ?? [];
-                    $activeProfile->interests = array_values(array_unique(array_merge($existingInterests, $profileData['interests'])));
+                    foreach ($profileData['interests'] as $interestName) {
+                        $interest = $this->interestService->findOrCreate($interestName);
+                        $this->interestService->addInterestToProfile($interest, $activeProfile);
+                    }
                 }
                 $activeProfile->save();
             }
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('AI profile synthesis failed: ' . $e->getMessage());
+            Log::error('AI profile synthesis failed: ' . $e->getMessage());
         }
     }
 }

@@ -40,7 +40,7 @@ class UserController extends Controller
             return response()->json(['message' => 'User not found'], 404);
         }
 
-        $user->load(['profiles', 'activeProfile']);
+        $user->load(['profiles.skills', 'profiles.interests', 'activeProfile.skills', 'activeProfile.interests']);
 
         return response()->json($user);
     }
@@ -118,7 +118,7 @@ class UserController extends Controller
 
         // Reload user to get updated media URLs
         $updatedUser = $this->userService->getById($user->id);
-        $updatedUser->load(['profiles', 'activeProfile']);
+        $updatedUser->load(['profiles.skills', 'profiles.interests', 'activeProfile.skills', 'activeProfile.interests']);
 
         return response()->json($updatedUser);
     }

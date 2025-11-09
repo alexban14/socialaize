@@ -2,8 +2,12 @@
 
 namespace App\Providers;
 
+use App\Repositories\Interest\InterestRepository;
+use App\Repositories\Interest\InterestRepositoryInterface;
 use App\Repositories\Media\MediaRepository;
 use App\Repositories\Media\MediaRepositoryInterface;
+use App\Repositories\Skill\SkillRepository;
+use App\Repositories\Skill\SkillRepositoryInterface;
 use App\Repositories\User\UserRepository;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Repositories\UserProfile\UserProfileRepository;
@@ -16,8 +20,12 @@ use App\Services\Auth\PasswordResetService;
 use App\Services\Auth\PasswordResetServiceInterface;
 use App\Services\Auth\UpdatePasswordService;
 use App\Services\Auth\UpdatePasswordServiceInterface;
+use App\Services\Interest\InterestService;
+use App\Services\Interest\InterestServiceInterface;
 use App\Services\Media\MediaService;
 use App\Services\Media\MediaServiceInterface;
+use App\Services\Skill\SkillService;
+use App\Services\Skill\SkillServiceInterface;
 use App\Services\User\UserService;
 use App\Services\User\UserServiceInterface;
 use App\Services\UserProfile\UserProfileService;
@@ -41,11 +49,15 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(MediaServiceInterface::class, MediaService::class);
         $this->app->bind(UserProfileServiceInterface::class, UserProfileService::class);
         $this->app->bind(AiServiceInterface::class, AiService::class);
+        $this->app->bind(SkillServiceInterface::class, SkillService::class);
+        $this->app->bind(InterestServiceInterface::class, InterestService::class);
 
         // repositories
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
         $this->app->bind(MediaRepositoryInterface::class, MediaRepository::class);
         $this->app->bind(UserProfileRepositoryInterface::class, UserProfileRepository::class);
+        $this->app->bind(SkillRepositoryInterface::class, SkillRepository::class);
+        $this->app->bind(InterestRepositoryInterface::class, InterestRepository::class);
     }
 
     /**

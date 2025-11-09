@@ -7,7 +7,6 @@ use Illuminate\Cache\Repository;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Hash;
 
 class UserRepository implements UserRepositoryInterface
 {

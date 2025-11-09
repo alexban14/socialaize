@@ -6,6 +6,7 @@ use App\Enums\ProfileType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class UserProfile extends Model
 {
@@ -25,13 +26,21 @@ class UserProfile extends Model
     {
         return [
             'profile_type' => ProfileType::class,
-            'skills' => 'array',
-            'interests' => 'array',
         ];
     }
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function skills(): BelongsToMany
+    {
+        return $this->belongsToMany(Skill::class, 'skill_user_profile')->withTimestamps();
+    }
+
+    public function interests(): BelongsToMany
+    {
+        return $this->belongsToMany(Interest::class, 'interest_user_profile')->withTimestamps();
     }
 }

@@ -6,10 +6,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/hooks/useAuth";
 import { UserProfile as UserProfileSchema } from "@/schemas/user"; // Renamed to avoid conflict
-import { Badge } from "@/components/ui/badge";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import * as userService from "@/services/userService";
+import { Skills } from "./profile/Skills";
+import { Interests } from "./profile/Interests";
 
 interface UserStats {
   posts: number;
@@ -31,8 +32,6 @@ interface UserProfileProps {
     coverImage: string;
     location?: string;
     website?: string;
-    skills?: string[];
-    interests?: string[];
     joinedDate: string;
     verified?: boolean;
     stats: UserStats;
@@ -183,29 +182,10 @@ export function UserProfile({
                         </div>
                     </div>
 
-                    {/* Skills */}
-                    {userProp.skills && userProp.skills.length > 0 && (
-                        <div className="mt-6 space-y-2">
-                            <h4 className="font-semibold text-foreground">Skills</h4>
-                            <div className="flex flex-wrap gap-2">
-                                {userProp.skills.map((skill, index) => (
-                                    <Badge key={index} variant="secondary">{skill}</Badge>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Interests */}
-                    {userProp.interests && userProp.interests.length > 0 && (
-                        <div className="mt-6 space-y-2">
-                            <h4 className="font-semibold text-foreground">Interests</h4>
-                            <div className="flex flex-wrap gap-2">
-                                {userProp.interests.map((interest, index) => (
-                                    <Badge key={index} variant="outline">{interest}</Badge>
-                                ))}
-                            </div>
-                        </div>
-                    )}
+                    <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <Skills skills={activeProfile?.skills || []} isOwnProfile={isOwnProfile} />
+                        <Interests interests={activeProfile?.interests || []} isOwnProfile={isOwnProfile} />
+                    </div>
 
                     {/* Stats */}
                     <div className="mt-6 grid grid-cols-2 md:grid-cols-3 gap-4">
