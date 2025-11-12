@@ -20,27 +20,27 @@ class SkillController extends Controller
         return response()->json($skills);
     }
 
-    public function userSkills(Request $request): JsonResponse
+    public function userSkills(Request $request, string $profileType): JsonResponse
     {
-        $profile = $request->user()->activeProfile;
+        $profile = $request->user()->profiles()->where('profile_type', $profileType)->first();
 
         if (!$profile) {
-            return response()->json(['message' => 'User has no active profile.'], 404);
+            return response()->json(['message' => 'Profile not found.'], 404);
         }
 
         return response()->json($profile->skills);
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(Request $request, string $profileType): JsonResponse
     {
         $request->validate([
             'name' => 'required|string|max:255',
         ]);
 
-        $profile = $request->user()->activeProfile;
+        $profile = $request->user()->profiles()->where('profile_type', $profileType)->first();
 
         if (!$profile) {
-            return response()->json(['message' => 'User has no active profile.'], 404);
+            return response()->json(['message' => 'Profile not found.'], 404);
         }
 
         $skill = $this->skillService->findOrCreate($request->input('name'));
@@ -50,14 +50,14 @@ class SkillController extends Controller
         return response()->json($skill, 201);
     }
 
-    public function destroy(Request $request, int $skillId): JsonResponse
+    public function destroy(Request $request, string $profileType, int $skillId): JsonResponse
     {
-        $profile = $request->user()->activeProfile;
+        $profile = $request->user()->profiles()->where('profile_type', $profileType)->first();
 
         if (!$profile) {
-            return response()->json(['message' => 'User has no active profile.'], 404);
+            return response()->json(['message' => 'Profile not found.'], 404);
         }
-        
+
         $skill = $this->skillService->getAllSkills()->find($skillId);
 
         if (!$skill) {

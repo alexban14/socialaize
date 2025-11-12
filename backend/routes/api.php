@@ -48,15 +48,15 @@ Route::prefix('v1')->group(function () {
 
             // Skills
             Route::get('/skills', [SkillController::class, 'index']);
-            Route::get('/user/skills', [SkillController::class, 'userSkills']);
-            Route::post('/user/skills', [SkillController::class, 'store']);
-            Route::delete('/user/skills/{skillId}', [SkillController::class, 'destroy']);
+            Route::get('/user/profiles/{profile_type}/skills', [SkillController::class, 'userSkills']);
+            Route::post('/user/profiles/{profile_type}/skills', [SkillController::class, 'store']);
+            Route::delete('/user/profiles/{profile_type}/skills/{skillId}', [SkillController::class, 'destroy']);
 
             // Interests
             Route::get('/interests', [InterestController::class, 'index']);
-            Route::get('/user/interests', [InterestController::class, 'userInterests']);
-            Route::post('/user/interests', [InterestController::class, 'store']);
-            Route::delete('/user/interests/{interestId}', [InterestController::class, 'destroy']);
+            Route::get('/user/profiles/{profile_type}/interests', [InterestController::class, 'userInterests']);
+            Route::post('/user/profiles/{profile_type}/interests', [InterestController::class, 'store']);
+            Route::delete('/user/profiles/{profile_type}/interests/{interestId}', [InterestController::class, 'destroy']);
 
             Route::post('/ai/synthesize-profile', [AiController::class, 'synthesizeProfile']);
         });

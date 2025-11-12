@@ -6,16 +6,16 @@ export const getAllInterests = async (): Promise<Interest[]> => {
   return response.data;
 };
 
-export const getUserInterests = async (): Promise<Interest[]> => {
-  const response = await api.get('/user/interests');
+export const getUserInterests = async (profileType: string): Promise<Interest[]> => {
+  const response = await api.get(`/user/profiles/${profileType}/interests`);
   return response.data;
 };
 
-export const addInterestToProfile = async (interestName: string): Promise<Interest> => {
-  const response = await api.post('/user/interests', { name: interestName });
+export const addInterestToProfile = async (interestName: string, profileType: string): Promise<Interest> => {
+  const response = await api.post(`/user/profiles/${profileType}/interests`, { name: interestName });
   return response.data;
 };
 
-export const removeInterestFromProfile = async (interestId: number): Promise<void> => {
-  await api.delete(`/user/interests/${interestId}`);
+export const removeInterestFromProfile = async (interestId: number, profileType: string): Promise<void> => {
+  await api.delete(`/user/profiles/${profileType}/interests/${interestId}`);
 };

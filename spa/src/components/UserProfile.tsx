@@ -183,8 +183,8 @@ export function UserProfile({
                     </div>
 
                     <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <Skills skills={activeProfile?.skills || []} isOwnProfile={isOwnProfile} />
-                        <Interests interests={activeProfile?.interests || []} isOwnProfile={isOwnProfile} />
+                        <Skills skills={activeProfile?.skills || []} isOwnProfile={isOwnProfile} profileType={activeProfile?.profile_type} />
+                        <Interests interests={activeProfile?.interests || []} isOwnProfile={isOwnProfile} profileType={activeProfile?.profile_type} />
                     </div>
 
                     {/* Stats */}

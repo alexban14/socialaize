@@ -20,27 +20,27 @@ class InterestController extends Controller
         return response()->json($interests);
     }
 
-    public function userInterests(Request $request): JsonResponse
+    public function userInterests(Request $request, string $profileType): JsonResponse
     {
-        $profile = $request->user()->activeProfile;
+        $profile = $request->user()->profiles()->where('profile_type', $profileType)->first();
 
         if (!$profile) {
-            return response()->json(['message' => 'User has no active profile.'], 404);
+            return response()->json(['message' => 'Profile not found.'], 404);
         }
 
         return response()->json($profile->interests);
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(Request $request, string $profileType): JsonResponse
     {
         $request->validate([
             'name' => 'required|string|max:255',
         ]);
 
-        $profile = $request->user()->activeProfile;
+        $profile = $request->user()->profiles()->where('profile_type', $profileType)->first();
 
         if (!$profile) {
-            return response()->json(['message' => 'User has no active profile.'], 404);
+            return response()->json(['message' => 'Profile not found.'], 404);
         }
 
         $interest = $this->interestService->findOrCreate($request->input('name'));
@@ -50,14 +50,14 @@ class InterestController extends Controller
         return response()->json($interest, 201);
     }
 
-    public function destroy(Request $request, int $interestId): JsonResponse
+    public function destroy(Request $request, string $profileType, int $interestId): JsonResponse
     {
-        $profile = $request->user()->activeProfile;
+        $profile = $request->user()->profiles()->where('profile_type', $profileType)->first();
 
         if (!$profile) {
-            return response()->json(['message' => 'User has no active profile.'], 404);
+            return response()->json(['message' => 'Profile not found.'], 404);
         }
-        
+
         $interest = $this->interestService->getAllInterests()->find($interestId);
 
         if (!$interest) {

@@ -13,14 +13,15 @@ import { Skill } from "@/schemas/skill";
 interface SkillsProps {
   skills: Skill[];
   isOwnProfile?: boolean;
+  profileType: string;
 }
 
-export function Skills({ skills, isOwnProfile = false }: SkillsProps) {
+export function Skills({ skills, isOwnProfile = false, profileType }: SkillsProps) {
   const { refreshUser } = useAuth();
   const [newSkillName, setNewSkillName] = useState('');
 
   const addMutation = useMutation({
-    mutationFn: skillService.addSkillToProfile,
+    mutationFn: (skillName: string) => skillService.addSkillToProfile(skillName, profileType),
     onSuccess: () => {
       toast.success("Skill added!");
       refreshUser();
@@ -34,7 +35,7 @@ export function Skills({ skills, isOwnProfile = false }: SkillsProps) {
   });
 
   const removeMutation = useMutation({
-    mutationFn: skillService.removeSkillFromProfile,
+    mutationFn: (skillId: number) => skillService.removeSkillFromProfile(skillId, profileType),
     onSuccess: () => {
       toast.success("Skill removed!");
       refreshUser();

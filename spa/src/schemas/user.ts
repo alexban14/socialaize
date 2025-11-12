@@ -1,4 +1,6 @@
 import { z } from 'zod';
+import { skillSchema } from './skill';
+import { interestSchema } from './interest';
 
 export const userProfileSchema = z.object({
   id: z.number(),
@@ -8,8 +10,8 @@ export const userProfileSchema = z.object({
   bio: z.string().nullable(),
   location: z.string().nullable(),
   website: z.string().nullable(),
-  skills: z.array(z.string()).nullable().optional(),
-  interests: z.array(z.string()).nullable().optional(),
+  skills: z.array(skillSchema).nullable().optional(),
+  interests: z.array(interestSchema).nullable().optional(),
   is_active: z.boolean(),
   created_at: z.string(),
   updated_at: z.string(),

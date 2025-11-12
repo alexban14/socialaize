@@ -13,14 +13,15 @@ import { Interest } from "@/schemas/interest";
 interface InterestsProps {
   interests: Interest[];
   isOwnProfile?: boolean;
+  profileType: string;
 }
 
-export function Interests({ interests, isOwnProfile = false }: InterestsProps) {
+export function Interests({ interests, isOwnProfile = false, profileType }: InterestsProps) {
   const { refreshUser } = useAuth();
   const [newInterestName, setNewInterestName] = useState('');
 
   const addMutation = useMutation({
-    mutationFn: interestService.addInterestToProfile,
+    mutationFn: (interestName: string) => interestService.addInterestToProfile(interestName, profileType),
     onSuccess: () => {
       toast.success("Interest added!");
       refreshUser();
@@ -34,7 +35,7 @@ export function Interests({ interests, isOwnProfile = false }: InterestsProps) {
   });
 
   const removeMutation = useMutation({
-    mutationFn: interestService.removeInterestFromProfile,
+    mutationFn: (interestId: number) => interestService.removeInterestFromProfile(interestId, profileType),
     onSuccess: () => {
       toast.success("Interest removed!");
       refreshUser();
