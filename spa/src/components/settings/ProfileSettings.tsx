@@ -27,14 +27,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-export const ProfileSettings = () => {
+interface ProfileSettingsProps {
+  profileType?: string;
+}
+
+export const ProfileSettings = ({ profileType }: ProfileSettingsProps) => {
   const { user, refreshUser } = useAuth();
-  const [avatarPreview, setAvatarPreview] = useState<string | null>(
-    user?.avatar || null
-  );
-  const [coverPreview, setCoverPreview] = useState<string | null>(
-    user?.cover_image || null
-  );
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+  const [coverPreview, setCoverPreview] = useState<string | null>(null);
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [coverFile, setCoverFile] = useState<File | null>(null);
   const avatarInputRef = useRef<HTMLInputElement>(null);
@@ -43,25 +43,31 @@ export const ProfileSettings = () => {
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
-      name: user?.name || "",
-      title: user?.active_profile?.title || "",
-      bio: user?.active_profile?.bio || "",
-      location: user?.active_profile?.location || "",
-      website: user?.active_profile?.website || "",
+      name: "",
+      title: "",
+      bio: "",
+      location: "",
+      website: "",
     },
   });
 
   useEffect(() => {
     if (user) {
-      form.setValue("name", user.name || "");
-      form.setValue("title", user.active_profile?.title || "");
-      form.setValue("bio", user.active_profile?.bio || "");
-      form.setValue("location", user.active_profile?.location || "");
-      form.setValue("website", user.active_profile?.website || "");
+      const profileToEdit = profileType
+        ? user.profiles?.find(p => p.profile_type === profileType)
+        : user.active_profile;
+
+      form.reset({
+        name: user.name || "",
+        title: profileToEdit?.title || "",
+        bio: profileToEdit?.bio || "",
+        location: profileToEdit?.location || "",
+        website: profileToEdit?.website || "",
+      });
       setAvatarPreview(user.avatar || null);
       setCoverPreview(user.cover_image || null);
     }
-  }, [user, form.setValue]);
+  }, [user, profileType, form.reset]);
 
   const profileUpdateMutation = useMutation({
     mutationFn: (formData: FormData) => userService.updateUserProfile(formData),
@@ -97,19 +103,22 @@ export const ProfileSettings = () => {
   const onSubmit = (data: ProfileFormValues) => {
     const formData = new FormData();
 
-    // Append text data
     formData.append("name", data.name);
     if (data.title) formData.append("title", data.title);
     if (data.bio) formData.append("bio", data.bio);
     if (data.location) formData.append("location", data.location);
     if (data.website) formData.append("website", data.website);
 
-    // Append files if they exist
     if (avatarFile) {
       formData.append("avatar", avatarFile);
     }
     if (coverFile) {
       formData.append("cover_image", coverFile);
+    }
+
+    const finalProfileType = profileType || user?.active_profile?.profile_type;
+    if (finalProfileType) {
+      formData.append('profile_type', finalProfileType);
     }
 
     profileUpdateMutation.mutate(formData);
@@ -201,7 +210,7 @@ export const ProfileSettings = () => {
                 <FormItem>
                   <FormLabel>Title</FormLabel>
                   <FormControl>
-                    <Input placeholder="Your professional title" {...field} />
+                    <Input placeholder="Your professional title" {...field} value={field.value ?? ''} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -214,7 +223,7 @@ export const ProfileSettings = () => {
                 <FormItem>
                   <FormLabel>Bio</FormLabel>
                   <FormControl>
-                    <Textarea {...field} />
+                    <Textarea {...field} value={field.value ?? ''} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -227,7 +236,7 @@ export const ProfileSettings = () => {
                 <FormItem>
                   <FormLabel>Location</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} value={field.value ?? ''} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -240,7 +249,7 @@ export const ProfileSettings = () => {
                 <FormItem>
                   <FormLabel>Website</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} value={field.value ?? ''} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

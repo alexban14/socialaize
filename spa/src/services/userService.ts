@@ -35,7 +35,7 @@ export const setActiveProfile = async (profileType: string): Promise<UserProfile
     return response.data;
 }
 
-export const synthesizeProfile = async (content: string) => {
-  const response = await api.post('/ai/synthesize-profile', { content });
+export const synthesizeProfile = async (content: string, profile_type: string) => {
+  const response = await api.post('/ai/synthesize-profile', { content, profile_type });
   return response.data;
 };

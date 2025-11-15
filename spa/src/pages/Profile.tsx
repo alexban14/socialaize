@@ -60,7 +60,7 @@ const Profile = () => {
                 </Button>
             </div>
             {/* Pass activeProfile to UserProfileComponent */}
-            <UserProfileComponent user={userProfileData} isOwnProfile={true} activeProfile={activeProfile} />
+            <UserProfileComponent user={userProfileData} isOwnProfile={true} activeProfile={activeProfile} profileType={activeProfileType} />
         </Tabs>
         <CreateProfileDialog open={showCreateProfile} onOpenChange={setShowCreateProfile} />
     </main>

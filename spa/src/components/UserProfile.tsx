@@ -38,19 +38,22 @@ interface UserProfileProps {
   };
   onEdit?: () => void;
   activeProfile?: UserProfileSchema; // Use UserProfileSchema here
+  profileType?: string;
 }
 
 export function UserProfile({
   user: userProp,
   onEdit,
   activeProfile,
+  profileType,
 }: UserProfileProps) {
     const navigate = useNavigate();
     const {user: authUser, refreshUser} = useAuth();
     const isOwnProfile = authUser?.id.toString() === userProp.id;
 
     const aiSynthesisMutation = useMutation({
-        mutationFn: (content: string) => userService.synthesizeProfile(content),
+        mutationFn: (data: { content: string; profile_type: string }) =>
+            userService.synthesizeProfile(data.content, data.profile_type),
         onSuccess: () => {
             toast.success("AI synthesis complete! Refreshing profile...");
             refreshUser();
@@ -67,7 +70,10 @@ export function UserProfile({
             toast.error("No active profile or bio to synthesize from.");
             return;
         }
-        aiSynthesisMutation.mutate(activeProfile.bio);
+        aiSynthesisMutation.mutate({
+            content: activeProfile.bio,
+            profile_type: activeProfile.profile_type,
+        });
     };
     return (
         <div className="max-w-4xl mx-auto">
@@ -136,7 +142,7 @@ export function UserProfile({
                                     <Plus className="w-4 h-4 mr-2"/>
                                     Create Post
                                 </Button>
-                                <Button variant="outline" size="sm" onClick={() => navigate('/profile/edit')}>
+                                <Button variant="outline" size="sm" onClick={() => navigate(`/profile/edit?type=${profileType}`)}>
                                     <Edit className="w-4 h-4 mr-2"/>
                                     Edit Profile
                                 </Button>
