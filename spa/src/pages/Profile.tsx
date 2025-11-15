@@ -46,7 +46,7 @@ const Profile = () => {
   return (
     <main className="container mx-auto py-8 px-4">
         <Tabs value={activeProfileType} onValueChange={setActiveProfileType} className="w-full">
-            <div className="flex justify-between items-center mb-4">
+            <div className="max-w-4xl mx-auto flex justify-between items-center mb-4">
                 <TabsList>
                     {user.profiles?.map(profile => (
                         <TabsTrigger key={profile.profile_type} value={profile.profile_type}>
