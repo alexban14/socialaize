@@ -3,73 +3,93 @@
 namespace App\Services\AI;
 
 use App\Models\User;
+use App\Services\AI\Factories\AiClientFactory;
 use App\Services\Interest\InterestServiceInterface;
 use App\Services\Skill\SkillServiceInterface;
-use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
 
 class AiService implements AiServiceInterface
 {
-    protected Client $client;
-    protected string $apiKey;
-
     public function __construct(
         private readonly SkillServiceInterface $skillService,
-        private readonly InterestServiceInterface $interestService
+        private readonly InterestServiceInterface $interestService,
+        private readonly AiClientFactory $aiClientFactory
     ) {
-        $this->client = new Client([
-            'base_uri' => 'https://api.openai.com/v1/',
-        ]);
-        $this->apiKey = config('services.openai.api_key');
     }
 
-    public function synthesizeProfileFromPost(User $user, string $postContent): void
+    public function synthesizeProfileFromPost(User $user, string $postContent, string $profileType): void
     {
-        if (empty($this->apiKey)) {
-            return;
-        }
-
-        $prompt = "Based on the following post, update the user's profile. Extract key skills, interests, and generate a new, improved bio.\n\nPost: {$postContent}\n\nResponse should be a JSON object with 'bio', 'skills', and 'interests' keys. Skills and interests should be arrays of strings.";
-
         try {
-            $response = $this->client->post('chat/completions', [
-                'headers' => [
-                    'Authorization' => 'Bearer ' . $this->apiKey,
-                    'Content-Type' => 'application/json',
-                ],
-                'json' => [
-                    'model' => 'gpt-4o-mini',
-                    'messages' => [
-                        ['role' => 'system', 'content' => 'You are a profile assistant. Respond with a JSON object.'],
-                        ['role' => 'user', 'content' => $prompt],
-                    ],
-                    'response_format' => ['type' => 'json_object'],
-                ],
-            ]);
+            $client = $this->aiClientFactory->make();
 
-            $data = json_decode($response->getBody()->getContents(), true);
-            $profileData = json_decode($data['choices'][0]['message']['content'], true);
+            $profile = $user->profiles()->where('profile_type', $profileType)->first();
 
-            $activeProfile = $user->activeProfile;
-
-            if ($activeProfile) {
-                if (isset($profileData['bio'])) {
-                    $activeProfile->bio = $profileData['bio'];
-                }
-                if (isset($profileData['skills']) && is_array($profileData['skills'])) {
-                    foreach ($profileData['skills'] as $skillName) {
-                        $skill = $this->skillService->findOrCreate($skillName);
-                        $this->skillService->addSkillToProfile($skill, $activeProfile);
-                    }
-                }
-                if (isset($profileData['interests']) && is_array($profileData['interests'])) {
-                    foreach ($profileData['interests'] as $interestName) {
-                        $interest = $this->interestService->findOrCreate($interestName);
-                        $this->interestService->addInterestToProfile($interest, $activeProfile);
-                    }
-                }
-                $activeProfile->save();
+            if (!$profile) {
+                Log::info("AI profile synthesis skipped: No '{$profileType}' profile for user {$user->id}.");
+                return;
             }
+
+            $skills = $profile->skills()->pluck('name')->implode(', ');
+            $interests = $profile->interests()->pluck('name')->implode(', ');
+
+            // Pre-evaluate expressions into simple variables for heredoc compatibility.
+            $profileTitle = $profile->title ?? 'Not set';
+            $profileBio = $profile->bio ?? 'Not set';
+            $profileSkills = $skills ?: 'None';
+            $profileInterests = $interests ?: 'None';
+
+            $context = <<<CONTEXT
+- **Title:** {$profileTitle}
+- **Bio:** {$profileBio}
+- **Skills:** {$profileSkills}
+- **Interests:** {$profileInterests}
+CONTEXT;
+
+            $prompt = <<<PROMPT
+**Goal:** Enhance the user's professional profile based on their latest post.
+
+**Context: User's Current Profile ({$profileType})**
+{$context}
+
+**Task: Analyze the following post and update the profile.**
+- **Post Content:** "{$postContent}"
+
+**Instructions:**
+1.  **Analyze:** Read the post content in the context of the user's current profile.
+2.  **Generate Bio:** Write a new, improved bio (around 3-4 sentences) that synthesizes the user's existing profile with insights from the new post. The new bio should be engaging and reflect their expertise.
+3.  **Extract Skills:** Identify and list key skills from the post. These can be new skills or reinforce existing ones.
+4.  **Extract Interests:** Identify and list key interests or topics from the post.
+
+**Output Format:**
+Return a single, valid JSON object with the following keys:
+- "bio": A string containing the new bio.
+- "skills": An array of strings.
+- "interests": An array of strings.
+PROMPT;
+
+            Log::debug("AiService prompt: " . $prompt);
+
+            $profileData = $client->synthesize($prompt);
+
+            Log::debug("Parsed profile data: " . json_encode($profileData, JSON_PRETTY_PRINT));
+
+            if (isset($profileData['bio'])) {
+                $profile->bio = $profileData['bio'];
+            }
+            if (isset($profileData['skills']) && is_array($profileData['skills'])) {
+                foreach ($profileData['skills'] as $skillName) {
+                    $skill = $this->skillService->findOrCreate($skillName);
+                    $this->skillService->addSkillToProfile($skill, $profile);
+                }
+            }
+            if (isset($profileData['interests']) && is_array($profileData['interests'])) {
+                foreach ($profileData['interests'] as $interestName) {
+                    $interest = $this->interestService->findOrCreate($interestName);
+                    $this->interestService->addInterestToProfile($interest, $profile);
+                }
+            }
+            $profile->save();
+
         } catch (\Exception $e) {
             Log::error('AI profile synthesis failed: ' . $e->getMessage());
         }

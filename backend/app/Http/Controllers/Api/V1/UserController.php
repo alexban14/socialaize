@@ -109,10 +109,11 @@ class UserController extends Controller
             unset($validatedData['name']);
         }
 
+        // Determine which profile to update
+        $profileType = $request->input('profile_type', $user->activeProfile?->profile_type->value ?? 'personal');
+
         // Update profile data
         if (!empty($validatedData)) {
-            $activeProfile = $user->activeProfile;
-            $profileType = $activeProfile ? $activeProfile->profile_type->value : 'personal';
             $this->userProfileService->updateProfile($user, $profileType, $validatedData);
         }
 

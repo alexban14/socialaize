@@ -14,6 +14,7 @@ use App\Repositories\UserProfile\UserProfileRepository;
 use App\Repositories\UserProfile\UserProfileRepositoryInterface;
 use App\Services\AI\AiService;
 use App\Services\AI\AiServiceInterface;
+use App\Services\AI\Factories\AiClientFactory;
 use App\Services\Auth\AuthServiceInterface;
 use App\Services\Auth\PassportAuthService;
 use App\Services\Auth\PasswordResetService;
@@ -51,6 +52,9 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(AiServiceInterface::class, AiService::class);
         $this->app->bind(SkillServiceInterface::class, SkillService::class);
         $this->app->bind(InterestServiceInterface::class, InterestService::class);
+
+        // AI Factory
+        $this->app->singleton(AiClientFactory::class);
 
         // repositories
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
