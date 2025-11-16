@@ -8,7 +8,7 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
     container_name: socializeai-postgres
     volumes:
-      - socializeai-pg-data:/var/lib/postgresql/data
+      - ${HOST_MOUNT_POINT}/socializeai-pg-data:/var/lib/postgresql/data
     ports:
       - "6324:5432"
     networks:
@@ -32,7 +32,7 @@ services:
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
       MINIO_ROOT_USER: ${MINIO_ROOT_USER}
     volumes:
-      - socializeai-minio-data:/minio/data:/data
+      - ${HOST_MOUNT_POINT}/socializeai-minio-data:/minio/data:/data
     networks:
       - default
 
@@ -110,10 +110,6 @@ services:
       - /app/node_modules
     networks:
       - default
-
-volumes:
-  socializeai-pg-data: ~
-  socializeai-minio-data: ~
 
 networks:
   default:
