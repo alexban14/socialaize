@@ -1,0 +1,33 @@
+FROM php:8.4-fpm-alpine
+
+# Install dependencies for Laravel
+RUN apk add --no-cache \
+    postgresql-dev \
+    libzip-dev \
+    curl-dev \
+    && docker-php-ext-install pdo pdo_pgsql bcmath zip \
+    && pecl install redis \
+    && docker-php-ext-enable redis
+
+WORKDIR /var/www/html
+
+# Copy composer files and install dependencies
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --no-interaction --no-progress --optimize-autoloader
+
+# Copy application code
+COPY . .
+
+# Copy production entrypoint
+COPY .docker/entrypoint.prod.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+# Set permissions for Laravel
+RUN chown -R www-data:www-data storage bootstrap/cache && \
+    chmod -R 775 storage bootstrap/cache
+
+# Expose port 9000 and set entrypoint
+EXPOSE 9000
+ENTRYPOINT ["/entrypoint.sh"]
+
